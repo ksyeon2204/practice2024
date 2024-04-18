@@ -1,0 +1,113 @@
+-- programmers practice
+
+-- 2024.04.16
+-- 1. 가장 큰 물고기 10마리 구하기
+SELECT ID, LENGTH
+  FROM FISH_INFO 
+ ORDER BY LENGTH DESC, ID LIMIT 10;
+ 
+-- 2.한 해에 잡은 물고기 수 구하기
+SELECT COUNT(*) AS FISH_COUNT
+  FROM FISH_INFO
+ WHERE YEAR(TIME) = 2021;
+ 
+ --3.잡은 물고기 중 가장 큰 물고기의 길이 구하기
+ SELECT CONCAT(MAX(LENGTH), "cm") AS MAX_LENGTH
+  FROM FISH_INFO;
+  
+-- 4.연도별 대장균 크기의 편차 구하기 
+SELECT YEAR(DIFFERENTIATION_DATE) AS YEAR
+       ,ABS(MAX(SIZE_OF_COLONY) OVER(PARTITION BY YEAR(DIFFERENTIATION_DATE)) - SIZE_OF_COLONY) AS YEAR_DEV
+       ,ID
+  FROM ECOLI_DATA
+ ORDER BY YEAR, YEAR_DEV;
+ 
+-- 2024.04.18
+-- 5.잡은 물고기의 평균 길이 구하기 
+-- -> IFULL(컬럼, A) : 컬럼이 NULL 이면 A 출력 
+SELECT ROUND(AVG(IFNULL(LENGTH, 10)),2) AS AVERAGE_LENGTH
+  FROM FISH_INFO;
+  
+-- 6.잔챙이 잡은 수 구하기 
+SELECT COUNT(ID) AS FISH_COUNT
+  FROM FISH_INFO
+ WHERE LENGTH IS NULL;
+ 
+-- 7.Python 개발자 찾기 
+SELECT ID
+       ,EMAIL
+       ,FIRST_NAME
+       ,LAST_NAME
+  FROM DEVELOPER_INFOS
+ WHERE 'Python' IN (SKILL_1, SKILL_2, SKILL_3)
+ ORDER BY ID;
+ 
+-- 8.조건에 부합하는 중고거래 댓글 조회하기 
+SELECT B.TITLE
+       ,B.BOARD_ID
+       ,R.REPLY_ID
+       ,R.WRITER_ID
+       ,R.CONTENTS
+       ,DATE_FORMAT(R.CREATED_DATE, '%Y-%m-%d') AS CREATED_DATE
+  FROM USED_GOODS_BOARD B
+  INNER JOIN USED_GOODS_REPLY R
+    ON B.BOARD_ID = R.BOARD_ID
+ WHERE DATE_FORMAT(B.CREATED_DATE, '%Y-%m') = '2022-10'
+ ORDER BY R.CREATED_DATE, B.TITLE;
+ 
+-- 9.특정 옵션이 포함된 자동차 리스트 구하기 
+SELECT CAR_ID
+       ,CAR_TYPE
+       ,DAILY_FEE
+       ,OPTIONS
+  FROM CAR_RENTAL_COMPANY_CAR
+ WHERE OPTIONS LIKE '%네비게이션%'
+ ORDER BY CAR_ID DESC;
+ 
+ --10.자동차 대여 기록에서 장기/단기 대여 구분하기
+ SELECT HISTORY_ID
+       ,CAR_ID
+       ,DATE_FORMAT(START_DATE, '%Y-%m-%d') AS START_DATE
+       ,DATE_FORMAT(END_DATE, '%Y-%m-%d') AS END_DATE
+       ,CASE WHEN DATEDIFF(END_DATE, START_DATE)+1 >= 30 THEN '장기 대여'
+             ELSE '단기 대여'
+         END AS RENT_TYPE
+  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+ WHERE DATE_FORMAT(START_DATE, '%Y-%m') = '2022-09'
+ ORDER BY HISTORY_ID DESC;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 

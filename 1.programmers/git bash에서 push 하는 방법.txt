@@ -1,1 +1,7 @@
-git bash에서 push 하는 방법
+<git bash에서 push 하는 방법>
+1. commit하고자 하는 폴더로 이동
+2. "git status" 로 올려놓을 파일 확인
+3. "git add . " 로 바뀐 파일목록 추가
+4. "git commit -m "커밋메세지" " 로 커밋 메시지 작성
+5. "git push -u origin master"로 git에 밀어 넣기 
+끝
