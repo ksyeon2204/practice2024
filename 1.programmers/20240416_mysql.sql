@@ -1,2 +1,30 @@
--- 2024.04.16 programmers practice
--- 1. 
+-- programmers practice
+-- 2024.04.16 - 2024.04.17
+-- 1. 가장 큰 물고기 10마리 구하기
+SELECT ID, LENGTH
+  FROM FISH_INFO 
+ ORDER BY LENGTH DESC, ID LIMIT 10;
+ 
+-- 2.한 해에 잡은 물고기 수 구하기
+SELECT COUNT(*) AS FISH_COUNT
+  FROM FISH_INFO
+ WHERE YEAR(TIME) = 2021;
+ 
+ --3.잡은 물고기 중 가장 큰 물고기의 길이 구하기
+ SELECT CONCAT(MAX(LENGTH), "cm") AS MAX_LENGTH
+  FROM FISH_INFO;
+  
+-- 4.연도별 대장균 크기의 편차 구하기 
+SELECT YEAR(DIFFERENTIATION_DATE) AS YEAR
+       ,ABS(MAX(SIZE_OF_COLONY) OVER(PARTITION BY YEAR(DIFFERENTIATION_DATE)) - SIZE_OF_COLONY) AS YEAR_DEV
+       ,ID
+  FROM ECOLI_DATA
+ ORDER BY YEAR, YEAR_DEV;
+ 
+ -- 5.잡은 물고기의 평균 길이 구하기
+ 
+ 
+ 
+ 
+ 
+ 
