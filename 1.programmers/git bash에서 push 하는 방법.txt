@@ -5,3 +5,6 @@
 4. "git commit -m "커밋메세지" " 로 커밋 메시지 작성
 5. "git push -u origin master"로 git에 밀어 넣기 
 끝
+
+<git에 있는 파일 내려받기>
+"git pull"

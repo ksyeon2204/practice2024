@@ -1,6 +1,6 @@
 -- programmers practice
 
--- 2024.04.16
+-- 2024.04.16 (화)
 -- 1. 가장 큰 물고기 10마리 구하기
 SELECT ID, LENGTH
   FROM FISH_INFO 
@@ -21,8 +21,9 @@ SELECT YEAR(DIFFERENTIATION_DATE) AS YEAR
        ,ID
   FROM ECOLI_DATA
  ORDER BY YEAR, YEAR_DEV;
- 
--- 2024.04.18
+
+-------------------------------------------------------------------------------------------------- 
+-- 2024.04.18 (목)
 -- 5.잡은 물고기의 평균 길이 구하기 
 -- -> IFULL(컬럼, A) : 컬럼이 NULL 이면 A 출력 
 SELECT ROUND(AVG(IFNULL(LENGTH, 10)),2) AS AVERAGE_LENGTH
@@ -75,14 +76,15 @@ SELECT CAR_ID
   FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
  WHERE DATE_FORMAT(START_DATE, '%Y-%m') = '2022-09'
  ORDER BY HISTORY_ID DESC;
- 
+
+-------------------------------------------------------------------------------------------------- 
 -- 2024.04.24 (수)
--- 평균 일일 대여 요금 구하기
+-- 11.평균 일일 대여 요금 구하기
 SELECT ROUND(AVG(DAILY_FEE),0) AS AVERAGE_FEE
   FROM CAR_RENTAL_COMPANY_CAR
  WHERE CAR_TYPE = 'SUV';
 
--- 조건에 맞는 도서 리스트 출력하기
+-- 12.조건에 맞는 도서 리스트 출력하기
 SELECT BOOK_ID
        ,DATE_FORMAT(PUBLISHED_DATE,'%Y-%m-%d') AS PUBLISHED_DATE
   FROM BOOK
@@ -90,7 +92,7 @@ SELECT BOOK_ID
    AND CATEGORY = '인문'
  ORDER BY BOOK_ID ;
 
--- 과일로 만든 아이스크림 고르기
+-- 13.과일로 만든 아이스크림 고르기
 SELECT F.FLAVOR
   FROM FIRST_HALF F
   LEFT OUTER JOIN ICECREAM_INFO I
@@ -99,12 +101,12 @@ SELECT F.FLAVOR
    AND I.INGREDIENT_TYPE = 'fruit_based'
  ORDER BY F.TOTAL_ORDER DESC;
 
--- 인기있는 아이스크림
+-- 14.인기있는 아이스크림
 SELECT FLAVOR
   FROM FIRST_HALF
  ORDER BY TOTAL_ORDER DESC, SHIPMENT_ID;
 
--- 흉부외과 또는 일반외과 의사 목록 출력하기
+-- 15.흉부외과 또는 일반외과 의사 목록 출력하기
 SELECT DR_NAME
        ,DR_ID
        ,MCDP_CD
@@ -113,16 +115,105 @@ SELECT DR_NAME
  WHERE MCDP_CD IN ('CS','GS')
  ORDER BY HIRE_YMD DESC, DR_NAME;
  
- -- testtest git에서 내려받기
+--------------------------------------------------------------------------------------------------
+-- 2024.04.26 (금)
+-- 16.12세 이하인 여자 환자 목록 출력하기
+SELECT PT_NAME
+       ,PT_NO
+       ,GEND_CD
+       ,AGE
+       ,IFNULL(TLNO,'NONE') AS TLNO
+  FROM PATIENT
+ WHERE AGE <= 12
+   AND GEND_CD = 'W'
+ ORDER BY AGE DESC, PT_NAME; 
+ 
+ -- 17.가장 비싼 상품 구하기
+SELECT MAX(PRICE) AS MAX_PRICE
+  FROM PRODUCT;
+ 
+ -- 18.조건에 맞는 회원수 구하기
+ SELECT COUNT(*) AS USERS
+  FROM USER_INFO
+ WHERE SUBSTRING(JOINED,1,4) = '2021'
+   AND AGE BETWEEN 20 AND 29;
+ 
+--19.나이 정보가 없는 회원 수 구하기
+SELECT COUNT(*) AS USERS
+  FROM USER_INFO
+ WHERE AGE IS NULL;
 
- 
- 
- 
- 
- 
+-- 20.경기도에 위치한 식품창고 목록 출력하기
+SELECT WAREHOUSE_ID
+       ,WAREHOUSE_NAME
+       ,ADDRESS
+       ,IFNULL(FREEZER_YN,'N') AS FREEZER_YN
+  FROM FOOD_WAREHOUSE
+ WHERE ADDRESS LIKE '%경기도%'
+ ORDER BY WAREHOUSE_ID ;
 
+-- 21.강원도에 위치한 생산공장 목록 출력하기
+SELECT FACTORY_ID
+       ,FACTORY_NAME
+       ,ADDRESS
+  FROM FOOD_FACTORY 
+ WHERE ADDRESS LIKE '%강원도%'
+ ORDER BY FACTORY_ID;
 
+-- 22.최댓값 구하기
+SELECT MAX(DATETIME) AS 시간
+  FROM ANIMAL_INS;
+ 
+--23.이름이 있는 동물의 아이디
+SELECT ANIMAL_ID
+  FROM ANIMAL_INS
+ WHERE NAME IS NOT NULL
+ ORDER BY ANIMAL_ID ;
 
+-- 24.상위 n개 레코드
+SELECT NAME
+  FROM ANIMAL_INS
+ ORDER BY DATETIME
+ LIMIT 1;
+
+-- 25.여러 기준으로 정렬하기
+SELECT ANIMAL_ID
+       ,NAME
+       ,DATETIME
+  FROM ANIMAL_INS
+ ORDER BY NAME, DATETIME DESC;
+
+-- 26.동물의 아이디와 이름
+SELECT ANIMAL_ID
+       ,NAME
+  FROM ANIMAL_INS
+ ORDER BY ANIMAL_ID;
+
+-- 27.이름이 없는 동물의 아이디
+SELECT ANIMAL_ID
+  FROM ANIMAL_INS
+ WHERE NAME IS NULL
+ ORDER BY ANIMAL_ID;
+
+-- 28.어린 동물 찾기
+SELECT ANIMAL_ID
+       ,NAME
+  FROM ANIMAL_INS
+  WHERE INTAKE_CONDITION <> 'AGED'
+ ORDER BY ANIMAL_ID;
+
+-- 29.아픈 동물 찾기
+SELECT ANIMAL_ID
+       ,NAME
+  FROM ANIMAL_INS
+ WHERE INTAKE_CONDITION = 'SICK'
+ ORDER BY ANIMAL_ID;
+
+-- 30.역순 정렬하기
+SELECT NAME
+       ,DATETIME
+  FROM ANIMAL_INS
+ ORDER BY ANIMAL_ID DESC;
 
 
 
