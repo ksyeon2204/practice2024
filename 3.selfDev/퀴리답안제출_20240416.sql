@@ -51,7 +51,7 @@ SELECT  A.ASST_NO
    AND A.MAX_SEQ_NO = C.SEQ_NO
 	;
 	
--- (2)-2. WHERE절에 넣기 
+-- (2)-2 WHERE절에 넣기 
 SELECT  A.ASST_NO
        ,B.USE_EMP_NO
        ,C.USE_EMP_NO
@@ -61,8 +61,8 @@ SELECT  A.ASST_NO
 			     , MIN(SEQ_NO) AS MIN_SEQ_NO
 			     , MAX(SEQ_NO) AS MAX_SEQ_NO
 			FROM TCOM024_ASST_USE_D 
-			WHERE ASST_NO IN (
-			    SELECT ASST_NO
+			WHERE (ASST_NO, INST_CD) IN (
+			    SELECT ASST_NO, INST_CD
 			    FROM TCOM024_ASST_USE_D 
 			    GROUP BY ASST_NO, INST_CD
 			    HAVING COUNT(ASST_NO) > 1
@@ -77,7 +77,7 @@ SELECT  A.ASST_NO
     ON A.ASST_NO = C.ASST_NO
    AND A.INST_CD = C.INST_CD
    AND A.MAX_SEQ_NO = C.SEQ_NO
-   ;
+;
 
 -- (2)-3. WHERE절에 넣기 
 SELECT  A.ASST_NO
@@ -103,17 +103,30 @@ SELECT  A.ASST_NO
 WHERE A.CNT > 1
 ;
 
--- 
-show full PROCESSLIST;
+-- 1. 자산사용명세(TCOM024_ASST_USE_D) 테이블의 유니크한 키 컬럼 
+-- 유니크 키 컬럼 : ID, INST_CD, ASST_NO, SEQ_NO
 
-select * from INFORMATION_SCHEMA.PROCESSLIST;
+-- 2. 유니크한 키의 검증쿼리  
+ SELECT ASST_NO
+	FROM TCOM024_ASST_USE_D 
+  GROUP BY ASST_NO, INST_CD, SEQ_NO
+ HAVING COUNT(ASST_NO) > 1;
+ 
+ SHOW INDEX 
+ FROM TCOM024_ASST_USE_D 
+WHERE Non_unique = 0;
+-- Non_unique로 인덱스가 고유(unique)한지 여부를 확인
 
-SELECT esc.THREAD_ID, t.processlist_id, esc.SQL_TEXT
-  FROM performance_schema.events_statements_current esc
-  JOIN performance_schema.threads t 
-	 ON t.thread_id = esc.thread_id;
-   
-SELECT esc.THREAD_ID, t.processlist_id, esc.*
-  FROM performance_schema.events_statements_current esc
-  JOIN performance_schema.threads t 
-	 ON t.thread_id = esc.thread_id;
+-- 3. 자산사용명세 테이블에 자산식별자로 일련번호를 채번해야하는 이상한부분을 찾고 쿼리로 다시 채번하는 조회쿼리   
+-- 1) 자산번호 'T002201161006030'의  SEQ_NO가  유니크키인데 중복으로 존재.  
+ SELECT *
+	FROM TCOM024_ASST_USE_D;
+ SELECT
+	     ASST_NO
+		 ,INST_CD
+		 ,USE_ST_DT
+		 ,USE_ED_DT
+		 ,ROW_NUMBER() OVER(PARTITION BY ASST_NO, INST_CD ORDER BY ASST_NO, INST_CD, SEQ_NO) AS SEQ_NO_NUM
+	FROM TCOM024_ASST_USE_D;
+
+	
