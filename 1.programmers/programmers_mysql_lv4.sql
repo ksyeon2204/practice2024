@@ -53,6 +53,7 @@ SELECT E.EMP_NO
  ORDER BY E.EMP_NO;
 
 -- 3. 언어별 개발자 분류하기
+-- HINT : 'D.SKILL_CODE & S1.CODE > 0'는 십진수 데이터를 AND 비트연산 했을 때 0보다 크면 둘 다 존재
  SELECT DS.GRADE
        ,DS.ID
        ,MAX(DS.EMAIL) AS EMAIL
