@@ -278,8 +278,31 @@ SELECT C1.CART_ID
    AND C2.NAME =  'Yogurt'
  GROUP BY C1.CART_ID 
  ORDER BY C1.CART_ID;
+ 
+-- 17. 입양 시각 구하기(2)
+  WITH RECURSIVE TIME AS (
+       SELECT 0 AS HOUR
+        UNION ALL
+       SELECT HOUR + 1
+         FROM TIME
+        WHERE HOUR < 23
+       )
+SELECT T.HOUR
+       ,COUNT(A.ANIMAL_ID) AS COUNT
+  FROM TIME T
+  LEFT OUTER JOIN ANIMAL_OUTS A
+    ON T.HOUR = HOUR(A.DATETIME)
+ GROUP BY T.HOUR
+ ORDER BY T.HOUR ;
 
+-- 18. 보호소에서 중성화한 동물
+SELECT I.ANIMAL_ID
+       ,I.ANIMAL_TYPE
+       ,I.NAME
+  FROM ANIMAL_INS I
+  LEFT OUTER JOIN ANIMAL_OUTS O
+    ON I.ANIMAL_ID = O.ANIMAL_ID 
+ WHERE I.SEX_UPON_INTAKE LIKE 'Intact%'
+   AND (O.SEX_UPON_OUTCOME LIKE 'Spayed%' OR O.SEX_UPON_OUTCOME LIKE 'Neutered%')
+ ORDER BY I.ANIMAL_ID;   
 
-----------------------------------------------------------
--- 17.
--- 18.
